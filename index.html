@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Slider</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-900">
+
+    <!-- FULL PAGE SLIDER -->
+    <div id="slider" class="relative w-screen h-screen overflow-hidden">
+
+        <!-- IMAGES -->
+        <div id="slides" class="w-full h-full">
+            <img src="image1.jpeg" class="slide absolute inset-0 w-full h-full object-contain bg-slate-900 hidden">
+            <img src="image2.jpeg" class="slide absolute inset-0 w-full h-full object-contain bg-slate-900 hidden">
+            <img src="image3.jpeg" class="slide absolute inset-0 w-full h-full object-contain bg-slate-900 hidden">
+            <img src="image4.jpeg" class="slide absolute inset-0 w-full h-full object-contain bg-slate-900 hidden">
+            <img src="image5.jpeg" class="slide absolute inset-0 w-full h-full object-contain bg-slate-900 hidden">
+            <img src="image6.jpeg" class="slide absolute inset-0 w-full h-full object-contain bg-slate-900 hidden">
+        </div>
+
+        <!-- LEFT BUTTON -->
+        <button id="previousButton"
+            class="absolute left-5 top-1/2 -translate-y-1/2
+                   w-12 h-12 flex items-center justify-center
+                   rounded-full border border-white/30
+                   bg-black/40 hover:bg-black/60
+                   text-white text-3xl shadow-lg backdrop-blur-sm
+                   transition">
+            &lt;
+        </button>
+
+        <!-- RIGHT BUTTON -->
+        <button id="nextButton"
+            class="absolute right-5 top-1/2 -translate-y-1/2
+                   w-12 h-12 flex items-center justify-center
+                   rounded-full border border-white/30
+                   bg-black/40 hover:bg-black/60
+                   text-white text-3xl shadow-lg backdrop-blur-sm
+                   transition">
+            &gt;
+        </button>
+
+    </div>
+
+    <!-- SAME JAVASCRIPT -->
+    <script>
+        const slides=document.querySelectorAll(".slide");
+        const previousButton=document.querySelector("#previousButton");
+        const nextButton=document.querySelector("#nextButton");
+        let slideIndex=0;
+        let interValid=null; 
+        document.addEventListener('DOMContentLoaded',initializeSlider);
+
+        function initializeSlider(){
+            if(slides.length>0){
+                slides[slideIndex].classList.remove("hidden");
+                slides[slideIndex].classList.add("block");
+                interValid=setInterval(nextSlide,5000);
+            }
+        }
+        function showSlide(index){
+            if(index>=slides.length){
+                slideIndex=0;
+            }
+            else if(index<0){
+                slideIndex=slides.length-1;
+            }
+            slides.forEach((slide)=>{
+                slide.classList.remove("block");
+                slide.classList.add("hidden");
+            })
+            slides[slideIndex].classList.remove("hidden");
+            slides[slideIndex].classList.add("block");
+        }
+        function previousSlide(){
+            clearInterval(interValid);
+            slideIndex--;
+            showSlide(slideIndex);
+            interValid=setInterval(nextSlide,5000);
+        }
+        function nextSlide(){
+            slideIndex++;
+            showSlide(slideIndex);
+        }   
+        previousButton.addEventListener('click',previousSlide);
+        nextButton.addEventListener('click',()=>{
+            clearInterval(interValid);
+            nextSlide();
+            interValid=setInterval(nextSlide,5000);
+        });
+        document.addEventListener("keydown", (event) => {
+            let key = event.key;
+
+            if (key === "l" || key === "L") {
+                clearInterval(interValid);
+                nextSlide();
+                interValid = setInterval(nextSlide, 5000);
+            }
+            else if (key === "j" || key === "J") {
+                previousSlide();
+            }
+        });
+
+    </script>
+
+</body>
+</html>
